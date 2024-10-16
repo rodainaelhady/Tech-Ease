@@ -8,49 +8,38 @@ class BatteryCheck(ctk.CTkFrame):
     def __init__(self, parent, show_frame):
         super().__init__(parent)
 
-        # جربي حجم أكبر للصورة هنا
         arrow_image = ctk.CTkImage(Image.open("images/home.png"), size=(24, 24))
 
-        # زر الرجوع للقائمة الرئيسية مع أيقونة الصورة
         back_button = ctk.CTkButton(self, text="Home", image=arrow_image, font=("Comic Sans MS", 20), height=35,
-                                    compound="left",  # الأيقونة تظهر على يسار النص
+                                    compound="left",  
                                     command=lambda: show_frame(None))
         back_button.pack(anchor="w", padx=5, pady=10)
-        battery2_image = ctk.CTkImage(Image.open("images/battery2.png"),size=(50,50))
-        # العنوان في منتصف الصفحة
-        label = ctk.CTkLabel(self, text="Battery Check", image=battery2_image,compound="right",font=("Comic Sans MS", 60))
+
+        battery2_image = ctk.CTkImage(Image.open("images/battery2.png"), size=(50, 50))
+        label = ctk.CTkLabel(self, text="Battery Check", image=battery2_image, compound="right", font=("Comic Sans MS", 60))
         label.pack(pady=20)
 
-        # تحميل صورة التقرير
         report_image = ctk.CTkImage(Image.open("images/report.png"), size=(30, 30))
 
-        # زر لإنشاء تقرير البطارية مع صورة على اليمين
-        generate_button = ctk.CTkButton(self, text="Generate Battery Report", image=report_image, font=("Comic Sans MS", 30), height=40,corner_radius=10,
-                                        compound="right",  # الأيقونة تظهر على يمين النص
+        generate_button = ctk.CTkButton(self, text="Generate Battery Report", image=report_image, font=("Comic Sans MS", 30), height=40, corner_radius=10,
+                                        compound="right",  
                                         command=self.generate_and_open_battery_report)
         generate_button.pack(pady=20, padx=5)
 
-        # رسالة لعرض حالة التقرير
         self.message_label = ctk.CTkLabel(self, text="", font=("Comic Sans MS", 15))
         self.message_label.pack(pady=10, padx=5)
 
-    # دالة توليد التقرير وفتحه
     def generate_and_open_battery_report(self):
         try:
-            # تشغيل أمر powercfg /batteryreport
-            subprocess.run(['powercfg', '/batteryreport'], check=True)
+            report_path = os.path.join(os.getcwd(), 'battery-report.html')
 
-            # تحديد مسار التقرير
-            report_path = os.path.join(os.environ['HOMEPATH'], 'battery-report.html')
+            subprocess.run(['powercfg', '/batteryreport', '/output', report_path], check=True)
 
-            # التحقق من وجود التقرير
             if os.path.exists(report_path):
                 self.message_label.configure(text="      Battery report generated successfully! Opening the report...        ", fg_color="green")
-                # فتح التقرير في المتصفح
                 webbrowser.open(report_path)
             else:
                 self.message_label.configure(text=" Battery report was not found. Something went wrong. ", fg_color="red")
 
         except subprocess.CalledProcessError as e:
             self.message_label.configure(text=f"An error occurred: {e}", fg_color="red")
-

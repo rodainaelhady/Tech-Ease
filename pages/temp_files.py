@@ -9,31 +9,26 @@ class TempFiles(ctk.CTkFrame):
     def __init__(self, parent, show_frame):
         super().__init__(parent)
 
-        # زر للعودة إلى القائمة الرئيسية
         arrow_image = ctk.CTkImage(Image.open("images/home.png"), size=(24, 24))
         back_button = ctk.CTkButton(self, text="Home", image=arrow_image, font=("Comic Sans MS", 20), height=35,
                                      compound="left", command=lambda: show_frame(None))
-        back_button.place(x=10, y=10)  # وضع الزر في الزاوية العليا اليسرى
-
-        # عنوان الصفحة
+        back_button.place(x=10, y=10)  
         clean_image = ctk.CTkImage(Image.open("images/clean2.png"), size=(50, 50))
         label = ctk.CTkLabel(self, text="Temporary Files", font=("Comic Sans MS", 60), image=clean_image, compound="right")
-        label.pack(pady=(60, 20))  # إضافة مسافة فوق العنوان
+        label.pack(pady=(60, 20)) 
 
-        # زر لتنظيف الملفات المؤقتة
         clean2_image = ctk.CTkImage(Image.open("images/clean3.png"), size=(30, 30))
         clean_button = ctk.CTkButton(self, text="Clean", font=("Comic Sans MS", 30), image=clean2_image,
                                       compound="right", command=self.clear_temp_files)
-        clean_button.pack(pady=20)  # إضافة مسافة تحت الزر
+        clean_button.pack(pady=20)  
 
     def clear_temp_files(self):
-        system_name = platform.system()  # تحديد نوع النظام
+        system_name = platform.system()  
         if system_name == "Windows":
-            temp_folder = os.getenv('TEMP')  # الحصول على مسار مجلد Temp
+            temp_folder = os.getenv('TEMP')  
             if temp_folder:
                 messagebox.showinfo("Info", f"Cleaning temporary files in: {temp_folder}")
                 try:
-                    # حذف جميع الملفات في مجلد TEMP
                     for filename in os.listdir(temp_folder):
                         file_path = os.path.join(temp_folder, filename)
                         try:
@@ -50,10 +45,9 @@ class TempFiles(ctk.CTkFrame):
                 messagebox.showwarning("Warning", "Could not locate TEMP folder.")
         
         elif system_name == "Linux":
-            temp_folder = "/tmp"  # مسار مجلد tmp
+            temp_folder = "/tmp"  
             messagebox.showinfo("Info", f"Cleaning temporary files in: {temp_folder}")
             try:
-                # حذف جميع الملفات في /tmp
                 for filename in os.listdir(temp_folder):
                     file_path = os.path.join(temp_folder, filename)
                     try:
@@ -70,12 +64,10 @@ class TempFiles(ctk.CTkFrame):
             messagebox.showwarning("Warning", "Unsupported Operating System.")
 
 def main():
-    # إعداد نافذة التطبيق
     app = ctk.CTk()
     app.title("Temporary Files Cleaner")
     app.geometry("600x400")
 
-    # إنشاء صفحة تنظيف الملفات المؤقتة
     temp_files_frame = TempFiles(app, show_frame=lambda x: None)
     temp_files_frame.pack(expand=True, fill="both")
 

@@ -66,7 +66,6 @@ def create_left_buttons(frame):
                             command=lambda: show_frame(CPURAM))
     button5.pack(pady=20, padx=10)
 
-# إعداد الأزرار على اليمين
 def create_right_buttons(frame):
     network_image = ctk.CTkImage(Image.open("images/networking.png"), size=(50, 50))
 
@@ -98,16 +97,13 @@ def create_right_buttons(frame):
                              command=lambda: show_frame(UninstallPrograms))
     button10.pack(pady=20, padx=10)
 
-# إنشاء الإطارات الجانبية
 left_frame = ctk.CTkFrame(main_frame,fg_color="#2B2B2B")
 left_frame.pack(side="left", fill="both", expand=True)
 
 right_frame = ctk.CTkFrame(main_frame,fg_color="#2B2B2B")
 right_frame.pack(side="right", fill="both", expand=True)
 
-# إنشاء الأزرار في الإطارات
 create_left_buttons(left_frame)
 create_right_buttons(right_frame)
 
-# بدء التطبيق
 app.mainloop()

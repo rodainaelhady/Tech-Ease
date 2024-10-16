@@ -7,26 +7,21 @@ class StartupPrograms(ctk.CTkFrame):
     def __init__(self, parent, show_frame):
         super().__init__(parent)
 
-        # Back button to return to the main menu
         arrow_image = ctk.CTkImage(Image.open("images/home.png"), size=(24, 24))
         back_button = ctk.CTkButton(self, text="Home", image=arrow_image, font=("Comic Sans MS", 20), height=35,
                                      compound="left", command=lambda: show_frame(None))
-        back_button.pack(pady=10, padx=10, anchor="nw")  # Place it at the top left
+        back_button.pack(pady=10, padx=10, anchor="nw")  
 
-        # Page title
         startup_image = ctk.CTkImage(Image.open("images/startup.png"), size=(50, 50))
         label = ctk.CTkLabel(self, text="Startup Programs", image=startup_image, compound="right", font=("Comic Sans MS", 60))
         label.pack(pady=10)
 
-        # Frame to store the programs
         self.programs_frame = ctk.CTkFrame(self)
         self.programs_frame.pack(pady=10, fill="both", expand=True)
 
-        # Load startup programs when the page opens
         self.load_startup_programs()
 
     def load_startup_programs(self):
-        # Load startup programs and display them
         programs = self.list_startup_programs()
         
         for name, path in programs:
@@ -41,7 +36,6 @@ class StartupPrograms(ctk.CTkFrame):
             disable_button.pack(side="right")
 
     def list_startup_programs(self):
-        # Registry paths for startup programs
         keys = [
             r"Software\Microsoft\Windows\CurrentVersion\Run",
             r"Software\Microsoft\Windows\CurrentVersion\RunOnce"
@@ -77,7 +71,7 @@ class StartupPrograms(ctk.CTkFrame):
                     try:
                         winreg.DeleteValue(key, program_name)
                         messagebox.showinfo("Success", f"Disabled program: {program_name}")
-                        self.load_startup_programs()  # Reload the program list
+                        self.load_startup_programs()  
                         return
                     except FileNotFoundError:
                         continue
@@ -87,12 +81,10 @@ class StartupPrograms(ctk.CTkFrame):
         messagebox.showwarning("Warning", "Program not found.")
 
 def main():
-    # Setting up the application window
     app = ctk.CTk()
     app.title("Startup Programs Management")
     app.geometry("600x400")
 
-    # Create the Startup Programs frame
     startup_programs_frame = StartupPrograms(app, show_frame=lambda x: None)
     startup_programs_frame.pack(expand=True, fill="both")
 
